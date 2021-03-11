@@ -1,0 +1,8 @@
+{
+  "name": "integration-tests-legacy",
+  "files": [
+    "workflows/integration-tests-legacy/integration-tests-legacy.template.yml",
+    "libs/integration-tests-legacy-job.lib.yml",
+    "libs/workflows.lib.yml"
+  ]
+}
