@@ -28,6 +28,20 @@
 #@ def tag_version(registry, image):
 #@ return tag(registry, image, "${{ needs.version.outputs.app_version }}")
 #@ end
+      
+---
+#@ def job_name(name,prefix="job-"):
+#@ return "{}{}".format(prefix,name)
+#@ end
+  
+#@ def job_name_from_slug(component, prefix="job-"):
+#@ return job_name(component.slug, prefix)
+#@ end
+      
+#@ def docker_build_job_name(component):
+#@ return job_name_from_slug(component,"docker-build-")
+#@ end
+
 ---
 #@ def login_docker(registry):
 name: #@ "Login to {}".format(registry.name)
@@ -57,7 +71,7 @@ uses: docker/setup-buildx-action@v1
 name: Checkout GitHub Action Repos
 uses: daspn/private-actions-checkout@v2
 with:
-  actions_list: '["covergo/get-version@v1","covergo/get-issue-key@v1.1","covergo/docker-extract@v1","covergo/docker-diagnose@v1.1"]'
+  actions_list: '["covergo/get-version@v1.4","covergo/get-issue-key@v1.2","covergo/docker-extract@v1","covergo/docker-diagnose@v1.2"]'
   checkout_base_path: ./.github/actions
   app_id: ${{ secrets.PRIVATE_ACTION_APP_ID }}
   app_private_key: ${{ secrets.PRIVATE_ACTION_APP_PRIVATE_KEY }}
@@ -138,24 +152,26 @@ steps:
   - #@ checkout()
 #@overlay/match by=overlay.index(1)
 #@overlay/insert before=True
-  - #@ setup_qemu()
-#@overlay/match by=overlay.index(2)
-#@overlay/insert before=True
-  - #@ setup_buildx()
-#@overlay/match by=overlay.index(3)
-#@overlay/insert before=True
   - #@ login_docker(cache_registry)
 #@ if main_registry!="skip":
-#@overlay/match by=overlay.index(3)
+#@overlay/match by=overlay.index(2)
 #@overlay/insert before=True
   - #@ login_docker(main_registry)
 #@ end
-#@overlay/match by=overlay.index(4)
+#@overlay/match by=overlay.index(3)
 #@overlay/insert before=True
   - #@ build_and_push_docker(component, cache_registry, step_id=step_id_value, tag_build=tag_build, provide_version_args=provide_version_args, load_image=load_image, push_image=push_image)
-#@overlay/match by=overlay.index(5)
+#@overlay/match by=overlay.index(4)
 #@overlay/insert before=True
   - name: Image digest
     run: #@ "echo ${{ steps."+step_id_value+".outputs.digest }}"
 #@ end
 
+#@ def get_runner(component):
+#@ if hasattr(component,"runner") :
+#@ return component.runner
+#@ else:
+#@ return "ubuntu-latest"
+#@ end
+#@ end
+  
