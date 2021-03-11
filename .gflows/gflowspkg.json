@@ -1,7 +1,7 @@
 {
   "name": "integration-tests-legacy",
   "files": [
-    "libs/integration-tests-legacy-job.lib.yml",
+    "libs/integration-tests-legacy-steps.lib.yml",
     "libs/workflows.lib.yml"
   ]
 }
