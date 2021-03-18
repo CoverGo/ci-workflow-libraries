@@ -6,6 +6,4 @@ templates:
   defaults:
     libs:
       - workflow-configuration
-    dependencies:
-     - https://raw.githubusercontent.com/CoverGo/workflow-check/v1.8/.gflows
-   #  - git@github.com:CoverGo/gflows.git/.gflows
+      - libs
