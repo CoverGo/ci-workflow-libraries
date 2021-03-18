@@ -3,7 +3,7 @@
 #@ load("workflows.lib.yml", "pull_request_defaults")
 
 name: Run integration tests
-"on": #@ pull_request_defaults(data.values.git)
+"on": #@ pull_request_defaults(data.values)
 jobs:
   integration-tests-legacy-small:
     name: Run legacy integration small tenants tests

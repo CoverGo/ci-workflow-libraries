@@ -22,7 +22,7 @@ jobs:
     - name: Checkout GitHub Action Repos
       uses: daspn/private-actions-checkout@v2
       with:
-        actions_list: '["covergo/get-version@v1","covergo/get-issue-key@v1.1","covergo/docker-extract@v1","covergo/docker-diagnose@v1.1"]'
+        actions_list: '["covergo/get-version@v1.4","covergo/get-issue-key@v1.2","covergo/docker-extract@v1","covergo/docker-diagnose@v1.2","covergo/set-compose-tags@v0.4","covergo/run-in-compose@v0.2"]'
         checkout_base_path: ./.github/actions
         app_id: ${{ secrets.PRIVATE_ACTION_APP_ID }}
         app_private_key: ${{ secrets.PRIVATE_ACTION_APP_PRIVATE_KEY }}
@@ -67,12 +67,12 @@ jobs:
         include-compose: true
     - name: Stop compose
       if: ${{ always() }}
-      run: docker-compose down
+      run: docker-compose down --remove-orphans
     - name: Upload test environment logs
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
-        name: Small tenants legacy integration tests tests diagnostics
+        name: Small tenants legacy integration tests diagnostics
         path: diagnostics/*
   integration-tests-legacy-big:
     name: Run legacy integration big tenants tests
@@ -87,7 +87,7 @@ jobs:
     - name: Checkout GitHub Action Repos
       uses: daspn/private-actions-checkout@v2
       with:
-        actions_list: '["covergo/get-version@v1","covergo/get-issue-key@v1.1","covergo/docker-extract@v1","covergo/docker-diagnose@v1.1"]'
+        actions_list: '["covergo/get-version@v1.4","covergo/get-issue-key@v1.2","covergo/docker-extract@v1","covergo/docker-diagnose@v1.2","covergo/set-compose-tags@v0.4","covergo/run-in-compose@v0.2"]'
         checkout_base_path: ./.github/actions
         app_id: ${{ secrets.PRIVATE_ACTION_APP_ID }}
         app_private_key: ${{ secrets.PRIVATE_ACTION_APP_PRIVATE_KEY }}
@@ -132,10 +132,10 @@ jobs:
         include-compose: true
     - name: Stop compose
       if: ${{ always() }}
-      run: docker-compose down
+      run: docker-compose down --remove-orphans
     - name: Upload test environment logs
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
-        name: Big tenants legacy integration tests tests diagnostics
+        name: Big tenants legacy integration tests diagnostics
         path: diagnostics/*

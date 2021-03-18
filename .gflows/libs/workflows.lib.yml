@@ -1,11 +1,22 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:overlay", "overlay")
 
-#@ def pull_request_defaults(git_settings):
-  push:
-    branches:
-#@ for branch in git_settings.branches:
+#@ def pull_request_defaults(data_values=None):
+push:
+  branches:
+#@ if hasattr(data_values,"git"):
+  #@ for branch in data_values.git.branches:
     - #@ branch
+  #@ end
+#@ else:
+    - master
+    - main
+    - F/*
+    - f/*
+    - R/*
+    - r/*
+    - B/*
+    - b/*
 #@ end
 #@ end
 
@@ -118,7 +129,7 @@ with:
 #@ end
 #@ end
 ---
-#@ def image_build_job(component, cache_registry, needs=["version"], main_registry="skip", tag_build="default", job_name="default", load_image=False, push_image=True, provide_version_args=False, add_if=True, add_name=False):
+#@ def image_build_job(component, cache_registry, needs=[], main_registry="skip", tag_build="default", job_name="default", load_image=False, push_image=True, provide_version_args=False, add_if=True, add_name=False):
 #@ if tag_build=="default":
 #@ tag_build = tag_cache(cache_registry,component)
 #@ end
