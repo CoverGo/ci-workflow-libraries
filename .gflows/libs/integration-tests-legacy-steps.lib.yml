@@ -37,11 +37,11 @@
     include-compose: true
 - name: Stop compose
   if: ${{ always() }}
-  run: docker-compose down
+  run: docker-compose down --remove-orphans
 - name: Upload test environment logs
   if: ${{ always() }}
   uses: actions/upload-artifact@v2
   with:
-    name: #@ "{} tests diagnostics".format(test_suites.name)
+    name: #@ "{} diagnostics".format(test_suites.name)
     path: diagnostics/*
 #@ end
