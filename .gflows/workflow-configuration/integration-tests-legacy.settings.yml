@@ -15,6 +15,7 @@ integration_tests_legacy:
     service_under_test:
       name: none
       image: none
+    #diagnostic_password: 123
   test_suites:
     small_tenants:
       name: Small tenants legacy integration tests
