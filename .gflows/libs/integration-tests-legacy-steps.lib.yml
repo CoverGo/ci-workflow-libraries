@@ -2,6 +2,7 @@
 #@ load("workflows.lib.yml", "login_docker")
 #@ load("workflows.lib.yml", "checkout_private_actions")
 #@ load("workflows.lib.yml", "checkout")
+#@ load("workflows.lib.yml", "generate_diagnostic_password")
 ---
 #@ def integration_tests_legacy_steps(repository, registries, environment, test_suites):
 - name: Checkout tests repository
@@ -35,6 +36,7 @@
     filter: name=covergo*
     diagnostic-result-path: diagnostics
     include-compose: true
+    encrypt-password: #@ generate_diagnostic_password(environment)
 - name: Stop compose
   if: ${{ always() }}
   run: docker-compose down --remove-orphans
