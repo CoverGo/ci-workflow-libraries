@@ -2,6 +2,35 @@
 
 Gflows package with some shared functionalities 
 
+### Usage
+
+1) Reference this project as [GFlows package](https://github.com/jbrunton/gflows/wiki/GFlows-Packages) in `config.yml` file in your [project](https://github.com/CoverGo/scan-code-net/blob/27fadbfe4910ae87ec747411eab5abf76ac66915/.gflows/config.yml). 
+
+```yaml
+# Config file for GFlows.
+# See https://github.com/jbrunton/gflows/wiki/Configuration for options.
+githubDir: github-sample
+templates:
+  engine: ytt
+  defaults:
+    libs:
+      - workflow-configuration/scan-code-net
+    dependencies:
+      - https://raw.githubusercontent.com/CoverGo/ci-workflow-libraries/v1.1/.gflows
+```
+2) Import functions required in your templates and use it in your template file, like [scan-code.template.yml](https://github.com/CoverGo/scan-code-net/blob/27fadbfe4910ae87ec747411eab5abf76ac66915/.gflows/workflows/scan-code-net/scan-code-net.template.yml)
+```yaml
+
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("workflows.lib.yml", "pull_request_defaults")
+
+name: Scan code
+"on": #@ pull_request_defaults(data.values.scan_code_net)
+jobs:
+  build:
+    name: Analyse
+```
 
 ### Functions for producing
 - [tags for docker registries](https://github.com/CoverGo/ci-workflow-libraries/blob/master/.gflows/libs/workflows.lib.yml#L39)
