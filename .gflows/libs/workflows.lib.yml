@@ -86,7 +86,7 @@ with:
   "covergo/get-version@v1.4",
   "covergo/get-issue-key@v1.2",
   "covergo/docker-extract@v1",
-  "covergo/docker-diagnose@v1.4",
+  "covergo/docker-diagnose@v1.5",
   "covergo/set-compose-tags@v1",
   "covergo/run-in-compose@v1"
   ]'
