@@ -128,6 +128,9 @@ with:
   tags: #@ tag_build
   cache-from: #@ "type=registry,ref="+tag_cache(cache_registry, component)
   cache-to: type=inline
+#@ if hasattr(component,"docker_target"):
+  target: #@ component.docker_target
+#@ end
 #@ if provide_version_args:
   build-args: |
     APP_VERSION=${{ needs.version.outputs.app_version }}
