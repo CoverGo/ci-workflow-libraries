@@ -41,7 +41,7 @@
 - name: Stop compose
   if: ${{ always() }}
   run: docker-compose down --remove-orphans
-- name: Upload test environment logs
+- name: Upload test environment logs as artifact
   if: ${{ always() }}
   uses: actions/upload-artifact@v2
   with:
