@@ -211,3 +211,7 @@ steps:
 #@ end
 #@ return getattr(default_timeout_component,"default_timeout", 30)
 #@ end
+  
+#@ def get_compose_service_name_filter_to_diagnose(integration_test_component) :
+#@ return "name=" + getattr(integration_test_component,"diagnostic_filter", "*")
+#@ end

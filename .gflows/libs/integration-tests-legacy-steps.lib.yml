@@ -3,6 +3,7 @@
 #@ load("workflows.lib.yml", "checkout_private_actions")
 #@ load("workflows.lib.yml", "checkout")
 #@ load("workflows.lib.yml", "generate_diagnostic_password")
+#@ load("workflows.lib.yml", "get_compose_service_name_filter_to_diagnose")
 ---
 #@ def integration_tests_legacy_steps(repository, registries, environment, test_suites):
 - name: Checkout tests repository
@@ -33,7 +34,7 @@
   if: ${{ always() }}
   uses: ./.github/actions/docker-diagnose
   with:
-    filter: name=covergo*
+    filter: #@ get_compose_service_name_filter_to_diagnose(environment)
     diagnostic-result-path: diagnostics
     include-compose: true
     encrypt-password: #@ generate_diagnostic_password(environment)
