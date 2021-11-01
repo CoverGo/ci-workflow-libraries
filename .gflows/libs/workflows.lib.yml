@@ -2,21 +2,14 @@
 #@ load("@ytt:overlay", "overlay")
 
 #@ def pull_request_defaults(data_values=None):
-push:
-  branches:
 #@ if hasattr(data_values,"git"):
-  #@ for branch in data_values.git.branches:
-    - #@ branch
-  #@ end
+  push:
+    branches:
+    #@ for branch in data_values.git.branches:
+      - #@ branch
+    #@ end
 #@ else:
-    - master
-    - main
-    - F/*
-    - f/*
-    - R/*
-    - r/*
-    - B/*
-    - b/*
+#@  return ["push"] 
 #@ end
 #@ end
 
