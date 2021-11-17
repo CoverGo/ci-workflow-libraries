@@ -1,0 +1,86 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:struct", "struct")
+
+---
+#@ def _default_switch(flag, value_default, value_not_default):
+#@ if flag == "default":
+#@ return value_default
+#@ else:
+#@ return value_not_default
+#@ end
+#@ end
+---
+#@ def _get_value(value, fallback):
+#@ if value == None:
+#@   return fallback;
+#@ end
+#@ return value
+#@ end
+---
+#@ def _get_timeout(component, default_timeout_component=None) : 
+#@ if hasattr(component,"timeout"):
+#@   return component.timeout
+#@ end
+#@ return getattr(default_timeout_component,"default_timeout", 30)
+#@ end
+---
+#@ def _get_runner(component):
+#@ if hasattr(component,"runner") :
+#@ return component.runner
+#@ else:
+#@ return "ubuntu-latest"
+#@ end
+#@ end
+---
+#@ def _build_git_branches_condition(git_section):
+#@ branches = getattr(git_section,"branches",["master","main"]);
+#@ git_branches = [];
+#@ for branch in branches:
+#@   git_branches.append("github.ref == 'refs/heads/{}'".format(branch));
+#@ end
+#@ return " || ".join(git_branches);
+#@ end
+---
+#@ def _generate_job(component, steps, environment_variables=None, default_timeout_component=None, needs=None, job_name=None, ifExpression=None):
+name: #@ _get_value(job_name, _job_name(component))
+timeout-minutes: #@ _get_timeout(component, default_timeout_component)
+runs-on: #@ getattr(component,"runner","ubuntu-latest")
+#@ if (ifExpression != None):
+if: #@ ifExpression
+#@ end
+#@ if needs != None and len(needs) > 0 :
+needs: #@ needs
+#@ end
+#@ if environment_variables != None:
+env: #@ environment_variables
+#@ end
+steps: #@ steps
+#@ end 
+---
+#@ def _workflow_triggers(git_section):
+#@ if hasattr(git_section,"branches"):
+push:
+  branches:
+    #@ for branch in git_section.branches:
+    - #@ branch
+      #@ end
+      #@ else:
+      #@   return ["push"] 
+      #@  end
+    #@ end
+---
+#@ def _job_name(component,prefix="job-"):
+#@ return "{}{}".format(prefix,component.slug)
+#@ end
+---
+#@ common = struct.make(
+#@ default_switch = _default_switch,
+#@ get_value = _get_value,
+#@ get_timeout = _get_timeout,
+#@ get_runner = _get_runner,
+#@ build_git_branches_condition = _build_git_branches_condition,
+#@ workflow_triggers = _workflow_triggers,
+#@ generate_job = _generate_job,
+#@ job_name = _job_name,
+#@ )
+---

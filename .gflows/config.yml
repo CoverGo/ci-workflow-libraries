@@ -5,5 +5,4 @@ templates:
   engine: ytt
   defaults:
     libs:
-      - workflow-configuration
       - libs
