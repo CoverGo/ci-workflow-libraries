@@ -69,8 +69,12 @@ push:
       #@  end
     #@ end
 ---
-#@ def _job_name(component,prefix="job-"):
-#@ return "{}{}".format(prefix,component.slug)
+#@ def _job_name(name,prefix="job-"):
+#@ return "{}{}".format(prefix,name)
+#@ end
+---
+#@ def _job_name_from_component(component,prefix="job-"):
+#@ return _job_name(getattr(component,"name",component.slug),prefix)
 #@ end
 ---
 #@ common = struct.make(
@@ -82,5 +86,6 @@ push:
 #@ workflow_triggers = _workflow_triggers,
 #@ generate_job = _generate_job,
 #@ job_name = _job_name,
+#@ job_name_from_component = _job_name_from_component,
 #@ )
 ---
