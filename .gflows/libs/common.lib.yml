@@ -1,5 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:struct", "struct")
+#@ load("@ytt:template", "template")
 
 ---
 #@ def _default_switch(flag, value_default, value_not_default):
@@ -41,7 +42,7 @@
 #@ return " || ".join(git_branches);
 #@ end
 ---
-#@ def _generate_job(component, steps, environment_variables=None, default_timeout_component=None, needs=None, job_name=None, ifExpression=None):
+#@ def _generate_job(component, steps, environment_variables=None, default_timeout_component=None, needs=None, job_name=None, ifExpression=None, outputs=None):
 name: #@ _get_value(job_name, _job_name(component))
 timeout-minutes: #@ _get_timeout(component, default_timeout_component)
 runs-on: #@ getattr(component,"runner","ubuntu-latest")
@@ -50,6 +51,12 @@ if: #@ ifExpression
 #@ end
 #@ if needs != None and len(needs) > 0 :
 needs: #@ needs
+#@ end
+#@ if outputs != None and len(outputs) > 0:
+outputs:
+  #@ for key, value in outputs.items():
+  _: #@ template.replace({key: value})
+  #@ end
 #@ end
 #@ if environment_variables != None:
 env: #@ environment_variables
