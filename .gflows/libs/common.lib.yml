@@ -86,7 +86,6 @@ push:
       #@ else:
       #@   return ["push"] 
       #@  end
-    #@ end
 #@ if hasattr(git_section,"paths"):
   paths:
     #@ for path in git_section.paths:
