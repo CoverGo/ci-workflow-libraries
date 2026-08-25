@@ -40,7 +40,7 @@
   run: docker compose down --remove-orphans
 - name: Upload test environment logs
   if: ${{ always() }}
-  uses: actions/upload-artifact@v2
+  uses: actions/upload-artifact@v4
   with:
     name: #@ "{} diagnostics".format(test_suites.name)
     path: diagnostics/*
