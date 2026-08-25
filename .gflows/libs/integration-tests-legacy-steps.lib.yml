@@ -30,6 +30,9 @@
 #@ end
 - name: Gather test environment logs
   if: ${{ always() }}
+  #! Diagnostics must never fail the build. The pinned docker-diagnose action
+  #! calls the removed docker-compose v1 binary (exit 127) on modern runners.
+  continue-on-error: true
   uses: ./.github/actions/docker-diagnose
   with:
     filter: name=covergo*
